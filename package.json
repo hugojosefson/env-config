@@ -66,8 +66,11 @@
     ]
   },
   "dependencies": {
+    "allow-methods": "^2.0.0",
     "compose-middleware": "^5.0.1",
     "compression": "^1.7.1",
+    "cors": "^2.8.5",
+    "execa": "^4.0.0",
     "express": "^4.17.1",
     "highland": "^2.13.5",
     "http-errors": "^1.7.3",
