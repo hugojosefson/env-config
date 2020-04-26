@@ -1,0 +1,16 @@
+[
+  {
+    "some": {
+      "deep": {
+        "content_FILE": "test/fixture-2.json"
+      }
+    }
+  },
+  {
+    "some": {
+      "other": {
+        "content_FILE": "test/fixture-1.json"
+      }
+    }
+  }
+]

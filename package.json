@@ -8,9 +8,12 @@
     "build": "sapper build --legacy",
     "export": "sapper export --legacy",
     "start": "PORT=$(get-port $(seq 3000 3100)) node __sapper__/build",
-    "cypress": "docker run -i --net=host -e PORT=\"${PORT:-3001}\" -v \"$(pwd)\":/e2e -w /e2e cypress/included:4.0.2 --config baseUrl=http://localhost:${PORT:-3001}",
     "lint": "prettier --plugin-search-dir=. --write '{src,static,cypress}/**/*.{svelte,html,js,mjs,md}' '/*.{svelte,html,js,mjs,md}'",
-    "test": "PORT=\"$(get-port $(seq 3000 3100))\" npm-run-all lint --parallel --race dev cypress"
+    "test": "npm-run-all lint --parallel test:mocha test:it",
+    "test:mocha": "mocha",
+    "test:it": "PORT=\"$(get-port $(seq 3000 3100))\" npm-run-all --parallel --race test:it:*",
+    "test:it:dev": "sapper dev",
+    "test:it:cypress": "docker run -i --net=host -e PORT=\"${PORT:-3001}\" -v \"$(pwd)\":/e2e -w /e2e cypress/included:4.0.2 --config baseUrl=http://localhost:${PORT:-3001}"
   },
   "babel": {
     "presets": [
@@ -19,6 +22,9 @@
     "plugins": [
       "@babel/plugin-transform-runtime"
     ]
+  },
+  "mocha": {
+    "spec": "test/*-test.mjs"
   },
   "eslintConfig": {
     "extends": [
@@ -105,6 +111,7 @@
     "eslint-plugin-svelte3": "^2.7.3",
     "feather-icons": "^4.25.0",
     "get-port-cli": "^2.0.0",
+    "mocha": "^7.1.2",
     "npm-run-all": "^4.1.5",
     "prettier": "^1.19.1",
     "prettier-plugin-svelte": "^0.7.0",
