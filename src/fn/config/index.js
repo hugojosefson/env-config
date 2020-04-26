@@ -2,7 +2,7 @@ import fs from 'fs'
 import R from 'ramda'
 import camelcase from 'camelcase'
 import toObject from 'to-object-reducer'
-import attemptJsonParse from '../fn/attempt-json-parse'
+import attemptJsonParse from './attempt-json-parse'
 
 const deepJsonParse = obj => {
   if (!(R.is(Object, obj) || R.is(Array, obj))) {
