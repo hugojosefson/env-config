@@ -1,12 +1,15 @@
 {
   "name": "@hugojosefson/env-config",
-  "description": "Reads env variables. Reads files if env var name suffixed with _FILE. Parses any JSON values.",
+  "description": "Reads env variables. Reads files from *_FILE variables. Parses any JSON values.",
   "version": "0.1.0",
   "type": "module",
   "license": "MIT",
   "scripts": {
+    "prepare": "npm-run-all documentation lint-readme",
     "lint": "prettier --write 'src/**/*.{js,mjs,md}' './*.{js,mjs,md}'",
-    "test": "npm-run-all lint mocha",
+    "lint-readme": "prettier --write README.md",
+    "documentation": "documentation readme --markdown-toc=false --access=public --resolve=node --quiet --shallow --section=API src/fn/config/index.mjs",
+    "test": "npm-run-all lint documentation lint-readme mocha",
     "mocha": "mocha"
   },
   "engines": {
@@ -42,6 +45,7 @@
     }
   },
   "devDependencies": {
+    "documentation": "^12.3.0",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-config-standard": "^14.1.1",
