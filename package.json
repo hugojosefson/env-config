@@ -9,6 +9,9 @@
     "test": "npm-run-all lint mocha",
     "mocha": "mocha"
   },
+  "engines": {
+    "node": ">=10.2.0"
+  },
   "mocha": {
     "spec": "test/*-test.mjs"
   },
