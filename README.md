@@ -1,4 +1,4 @@
-# env-config-file-json
+# @hugojosefson/env-config
 
 Reads env variables. Reads files if env var name suffixed with \_FILE. Parses
 any JSON values.

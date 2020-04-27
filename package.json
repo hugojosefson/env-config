@@ -1,5 +1,5 @@
 {
-  "name": "env-config-file-json",
+  "name": "@hugojosefson/env-config",
   "description": "Reads env variables. Reads files if env var name suffixed with _FILE. Parses any JSON values.",
   "version": "0.1.0",
   "type": "module",
