@@ -33,7 +33,7 @@ const parseConfig = ({
   source = process.env,
   keys = Object.keys(source),
   transformers = [identity],
-  transformer = pipe(...transformers)
+  transformer = pipe(...transformers),
 }) =>
   transformer(
     Object.entries(source)
