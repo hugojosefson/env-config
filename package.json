@@ -2,7 +2,6 @@
   "name": "@hugojosefson/env-config",
   "description": "Reads env variables. Reads files from *_FILE variables. Parses any JSON values.",
   "version": "1.0.3",
-  "type": "module",
   "main": "./index",
   "module": "./index.mjs",
   "license": "MIT",
