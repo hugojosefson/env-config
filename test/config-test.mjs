@@ -10,6 +10,10 @@ describe('config', () => {
     equal(typeof Config, 'function')
   })
 
+  it('allows calling without args', () => {
+    Config()
+  })
+
   it('parses a PORT', () => {
     const actual = Config({ keys: ['PORT'], source: { PORT: '3000' } })
     const expected = { PORT: 3000 }
