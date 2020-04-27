@@ -3,15 +3,27 @@
   "description": "Reads env variables. Reads files from *_FILE variables. Parses any JSON values.",
   "version": "1.0.2",
   "type": "module",
+  "main": "./index",
+  "module": "./index.mjs",
   "license": "MIT",
   "scripts": {
-    "prepare": "npm-run-all documentation lint-readme",
+    "prepare": "npm-run-all build-cjs documentation lint-readme",
+    "build-cjs": "babel index.mjs src --out-file index.js --source-maps inline",
     "lint": "prettier --write 'src/**/*.{js,mjs,md}' './*.{js,mjs,md}'",
     "lint-readme": "prettier --write README.md",
-    "documentation": "documentation readme --markdown-toc=false --access=public --resolve=node --quiet --shallow --section=API src/fn/config/index.mjs",
+    "documentation": "documentation readme --markdown-toc=false --access=public --resolve=node --quiet --shallow --section=API ./index.mjs",
     "test": "npm-run-all lint documentation lint-readme mocha",
     "mocha": "mocha"
   },
+  "files": [
+    "src",
+    "index.mjs",
+    "index.js",
+    "package.json",
+    "yarn.lock",
+    "README.md",
+    "LICENSE"
+  ],
   "engines": {
     "node": ">=10.2.0"
   },
@@ -44,7 +56,23 @@
       "prettier/prettier": 2
     }
   },
+  "babel": {
+    "presets": [
+      [
+        "@babel/preset-env",
+        {
+          "targets": {
+            "node": "10.2.0"
+          }
+        }
+      ]
+    ]
+  }
+,
   "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.0",
+    "@babel/preset-env": "^7.9.5",
     "documentation": "^12.3.0",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.11.0",
