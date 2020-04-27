@@ -12,6 +12,7 @@
   "engines": {
     "node": ">=10.2.0"
   },
+  "repository": "hugojosefson/env-config",
   "mocha": {
     "spec": "test/*-test.mjs"
   },
