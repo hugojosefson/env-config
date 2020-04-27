@@ -7,14 +7,7 @@
   "scripts": {
     "lint": "prettier --write 'src/**/*.{js,mjs,md}' './*.{js,mjs,md}'",
     "test": "npm-run-all lint mocha",
-    "mocha": "mocha",
-    "eslintConfig": {
-      "plugins": [
-        "import",
-        "prettier",
-        "standard"
-      ]
-    }
+    "mocha": "mocha"
   },
   "mocha": {
     "spec": "test/*-test.mjs"
@@ -28,10 +21,7 @@
     "plugins": [
       "import",
       "prettier",
-      "standard",
-      "cypress",
-      "html",
-      "svelte3"
+      "standard"
     ],
     "parserOptions": {
       "sourceType": "module",
@@ -39,7 +29,6 @@
     },
     "env": {
       "node": true,
-      "browser": true,
       "es2020": true
     },
     "rules": {
