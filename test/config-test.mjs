@@ -2,7 +2,7 @@
 import { deepStrictEqual as equal } from 'assert'
 import { readFileSync } from 'fs'
 import { fileURLToPath } from 'url'
-import envConfig from '../index.mjs'
+import envConfig from '../src/index.mjs'
 import pipe from '../src/fn/pipe.mjs'
 
 describe('envConfig', () => {

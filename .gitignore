@@ -6,3 +6,5 @@ __sapper__/
 .idea/
 /.dockerignore
 /index.js
+/index.js.map
+/*.log
