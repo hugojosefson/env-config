@@ -11,6 +11,7 @@
     "lint-readme": "prettier --write README.md",
     "documentation": "documentation readme --markdown-toc=false --access=public --resolve=node --quiet --shallow --section=API ./index.mjs",
     "test": "npm-run-all lint documentation lint-readme mocha",
+    "itest": "./itest/test.sh",
     "mocha": "mocha"
   },
   "files": [
