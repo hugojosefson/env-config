@@ -9,7 +9,7 @@
     "build-cjs": "rollup src/index.mjs --file index.js --format cjs",
     "lint": "prettier --write 'src/**/*.{js,mjs,md}' './*.{js,mjs,md}'",
     "lint-readme": "prettier --write README.md",
-    "documentation": "documentation readme --markdown-toc=false --access=public --resolve=node --quiet --shallow --section=API ./index.mjs",
+    "documentation": "documentation readme --markdown-toc=false --access=public --resolve=node --quiet --shallow --section=API src/index.mjs",
     "test": "npm-run-all lint documentation lint-readme mocha",
     "itest": "./itest/test.sh",
     "mocha": "mocha"

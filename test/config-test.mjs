@@ -25,7 +25,7 @@ describe('envConfig', () => {
 
     const actual = envConfig({
       keys: ['MY_OBJECT'],
-      source: { MY_OBJECT: JSON.stringify(MY_OBJECT) }
+      source: { MY_OBJECT: JSON.stringify(MY_OBJECT) },
     })
     const expected = { MY_OBJECT }
     equal(actual, expected)
@@ -36,7 +36,7 @@ describe('envConfig', () => {
 
     const actual = envConfig({
       keys: ['MY_ARRAY'],
-      source: { MY_ARRAY: JSON.stringify(MY_ARRAY) }
+      source: { MY_ARRAY: JSON.stringify(MY_ARRAY) },
     })
     const expected = { MY_ARRAY }
     equal(actual, expected)
@@ -44,26 +44,87 @@ describe('envConfig', () => {
 
   it('reads a file', () => {
     const path = fileURLToPath(import.meta.url)
-    const SOURCE_CODE = readFileSync(path, {encoding: 'utf8'}).trim()
+    const SOURCE_CODE = readFileSync(path, { encoding: 'utf8' }).trim()
 
-    const actual = envConfig({ keys: ['SOURCE_CODE', 'PORT'], source: {SOURCE_CODE_FILE: path, PORT: '3000'} })
-    const expected = {SOURCE_CODE, PORT: 3000}
+    const actual = envConfig({
+      keys: ['SOURCE_CODE', 'PORT'],
+      source: { SOURCE_CODE_FILE: path, PORT: '3000' },
+    })
+    const expected = { SOURCE_CODE, PORT: 3000 }
     equal(actual, expected)
   })
 
   it('reads a nested file', () => {
     const path = 'test/fixture-1.json'
 
-    const actual = envConfig({ source: {FIXTURE_FILE: path, PORT: '3000'} })
-    const expected = {FIXTURE: JSON.parse(readFileSync('test/fixture-1-result.json', {encoding: 'utf8'})), PORT: 3000}
+    const actual = envConfig({ source: { FIXTURE_FILE: path, PORT: '3000' } })
+    const expected = {
+      FIXTURE: JSON.parse(
+        readFileSync('test/fixture-1-result.json', { encoding: 'utf8' })
+      ),
+      PORT: 3000,
+    }
     equal(actual, expected)
   })
 
   it('reads a nested file, inside an array', () => {
     const path = 'test/fixture-3.json'
 
-    const actual = envConfig({ source: {FIXTURE_FILE: path, PORT: '3000'} })
-    const expected = {FIXTURE: JSON.parse(readFileSync('test/fixture-3-result.json', {encoding: 'utf8'})), PORT: 3000}
+    const actual = envConfig({ source: { FIXTURE_FILE: path, PORT: '3000' } })
+    const expected = {
+      FIXTURE: JSON.parse(
+        readFileSync('test/fixture-3-result.json', { encoding: 'utf8' })
+      ),
+      PORT: 3000,
+    }
+    equal(actual, expected)
+  })
+
+  it('decodes base64: value', () => {
+    const actual = envConfig({
+      keys: ['NAME'],
+      source: { NAME: 'base64:TXkgTmFtZQ==' },
+    })
+    const expected = { NAME: 'My Name' }
+    equal(actual, expected)
+  })
+
+  it('decodes base64: containing a JSON string into object', () => {
+    const MY_OBJECT = { my: { JSON: { hi: 'there' } } }
+
+    const actual = envConfig({
+      keys: ['MY_OBJECT'],
+      source: {
+        MY_OBJECT: `base64:${Buffer.from(JSON.stringify(MY_OBJECT)).toString(
+          'base64'
+        )}`,
+      },
+    })
+    const expected = { MY_OBJECT }
+    equal(actual, expected)
+  })
+  it('decodes base64: from a file to JSON, parses it', () => {
+    const path = 'test/fixture-3.base64'
+
+    const actual = envConfig({ source: { FIXTURE_FILE: path, PORT: '3000' } })
+    const expected = {
+      FIXTURE: JSON.parse(
+        readFileSync('test/fixture-3-result.json', { encoding: 'utf8' })
+      ),
+      PORT: 3000,
+    }
+    equal(actual, expected)
+  })
+
+  const base64 = s => 'base64:' + Buffer.from(s).toString('base64')
+
+  it('decodes double base64 value', () => {
+    const actual = envConfig({
+      source: { DOUBLE: base64(base64('Hi there!')) },
+    })
+    const expected = {
+      DOUBLE: 'Hi there!',
+    }
     equal(actual, expected)
   })
 })
