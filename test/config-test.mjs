@@ -127,6 +127,19 @@ describe('envConfig', () => {
     }
     equal(actual, expected)
   })
+
+  it.skip('config.redactFileContents() returns [redacted] for file contents', () => {
+    const path = fileURLToPath(import.meta.url)
+    const actual = envConfig({
+      keys: ['SOURCE_CODE', 'PORT'],
+      source: { SOURCE_CODE_FILE: path, PORT: '3000' },
+    }).redactFileContents()
+    const expected = {
+      SOURCE_CODE: '[redacted]',
+      PORT: 3000,
+    }
+    equal(actual, expected)
+  })
 })
 
 describe('pipe', () => {
