@@ -1,0 +1,9 @@
+{
+  "name": "esmodule-local",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "test": "docker run --rm -i -v $(cd ../../ && pwd):/app:ro -w /app/itest/esmodule-local --env-file env.env node:latest node index.mjs"
+  }
+}
