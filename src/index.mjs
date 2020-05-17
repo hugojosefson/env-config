@@ -1,90 +1,7 @@
-import { readFileSync } from 'fs'
-
-import attemptJsonParse from './attempt-json-parse.mjs'
 import identity from './fn/identity.mjs'
-import memoize from './fn/memoize.mjs'
 import pipe from './fn/pipe.mjs'
-import trim from './fn/trim.mjs'
-import toObjectReducer from './fn/to-object-reducer.mjs'
-import { isArray, isObject, isString } from './fn/is.mjs'
-
-const withoutPrefix = prefix => {
-  if (typeof prefix !== 'string') return identity
-  if (prefix.length === 0) return identity
-
-  return s => {
-    if (typeof s !== 'string') return s
-    return s.substring(prefix.length)
-  }
-}
-
-const parseObjectWithDecoders = decoders => {
-  const attemptDecode = (value, ...seenValues) => {
-    if (decoders.length === 0) {
-      return value
-    }
-    const result = decoders.reduce(
-      (
-        acc,
-        {
-          prefix,
-          test = s => typeof s === 'string' && s.startsWith(prefix),
-          decodeWithoutPrefix,
-          decode = pipe(withoutPrefix(prefix), decodeWithoutPrefix),
-        }
-      ) => {
-        try {
-          if (test(acc)) {
-            return decode(acc)
-          }
-        } catch (ignore) {}
-        return acc
-      },
-      value
-    )
-
-    if (result === value) return result
-    if (seenValues.includes(result)) return result
-    return attemptDecode(result, value, ...seenValues)
-  }
-
-  const parseIfObject = value => {
-    if (isObject(value)) {
-      return parseObject(value)
-    }
-    if (isArray(value)) {
-      return value.map(parseIfObject)
-    }
-    return value
-  }
-
-  const parseValue = pipe(trim, attemptDecode, attemptJsonParse, parseIfObject)
-
-  const readFile = path => readFileSync(path, { encoding: 'utf8' })
-  const parseFile = memoize(pipe(readFile, parseValue))
-
-  const parsePair = ([key, value]) =>
-    key.endsWith('_FILE')
-      ? [key.replace(/_FILE$/, ''), parseFile(value)]
-      : [key, parseValue(value)]
-
-  const parseObject = source =>
-    Object.entries(source).map(parsePair).reduce(toObjectReducer, {})
-
-  return parseObject
-}
-
-const hasKeyIn = keys => ([key, value]) =>
-  isString(key) &&
-  (keys.includes(key) ||
-    keys.includes(key.replace(/_FILE$/, '')) ||
-    keys.includes(`${key}_FILE`, ''))
-
-const onlyListedKeys = keys => {
-  const filter = hasKeyIn(keys)
-  return source =>
-    Object.entries(source).filter(filter).reduce(toObjectReducer, {})
-}
+import onlyListedKeys from './only-listed-keys.mjs'
+import parseObject from './parse-object.mjs'
 
 const envConfig = ({
   source = process.env,
@@ -93,11 +10,7 @@ const envConfig = ({
   transformers = [identity],
   transformer = pipe(...transformers),
 } = {}) =>
-  pipe(
-    onlyListedKeys(keys),
-    parseObjectWithDecoders(decoders),
-    transformer
-  )(source)
+  pipe(onlyListedKeys(keys), parseObject(decoders), transformer)(source)
 
 /**
  * Parses the source into an object.
