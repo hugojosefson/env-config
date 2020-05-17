@@ -2,7 +2,7 @@
 # yarn lockfile v1
 
 
-"@hugojosefson/env-config@^1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@hugojosefson/env-config/-/env-config-1.1.0.tgz#54e66c4958a8d454d79b8d08d9f2aee17f512f1c"
-  integrity sha512-UTj+yeCQ0eE6OBBA9P0yZVXEVpSP/QIDIqIF2zhQ50t5whJtLGXKf6ndOx5VYAlVpdwvFJE9FPFOyVNJWqHRug==
+"@hugojosefson/env-config@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@hugojosefson/env-config/-/env-config-1.2.0.tgz#871ca01ba168fd0935bbb2214c0d77b6460a1281"
+  integrity sha512-ExfUHAfyGHiBrfImTlisGAXKLPN9e4Dw5guJ7umwj8m8Co529Mq3wtyyECkCXraTYU2LYJU3x5+v93Em/QW0uA==

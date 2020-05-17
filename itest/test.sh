@@ -11,5 +11,5 @@ for i in */package.json; do
   echo "============================================"
   echo "${dir}"
   echo "--------------------------------------------"
-  (cd "${dir}" && yarn && yarn test)
+  (cd "${dir}" && yarn && yarn upgrade --latest && yarn test)
 done
