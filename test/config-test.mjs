@@ -128,14 +128,32 @@ describe('envConfig', () => {
     equal(actual, expected)
   })
 
-  it.skip('config.redactFileContents() returns [redacted] for file contents', () => {
+  it('{redactFileContents: true} returns [redacted] for file contents', () => {
     const path = fileURLToPath(import.meta.url)
     const actual = envConfig({
       keys: ['SOURCE_CODE', 'PORT'],
       source: { SOURCE_CODE_FILE: path, PORT: '3000' },
-    }).redactFileContents()
+      redactFileContents: true,
+    })
     const expected = {
       SOURCE_CODE: '[redacted]',
+      PORT: 3000,
+    }
+    equal(actual, expected)
+  })
+
+  it('{redactFileContents: true} returns [redacted] for file contents inside JSON object', () => {
+    const path = fileURLToPath(import.meta.url)
+    const actual = envConfig({
+      keys: ['MY_JSON', 'PORT'],
+      source: {
+        MY_JSON: JSON.stringify({ a: { SOURCE_CODE_FILE: path, b: 2 } }),
+        PORT: '3000',
+      },
+      redactFileContents: true,
+    })
+    const expected = {
+      MY_JSON: { a: { SOURCE_CODE: '[redacted]', b: 2 } },
       PORT: 3000,
     }
     equal(actual, expected)

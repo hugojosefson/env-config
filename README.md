@@ -150,6 +150,11 @@ Parses the source into an object.
 - `transformer` Alternatively for convenience, a single function for making any
   change to the configuration object afterwards. _Takes the complete config
   object as argument, and must return the new/altered config object. Optional._
+- `redactFileContents` Whether to redact contents from files. _Optional.
+  Default: `false`._
+- `readFile` Synchronous function to read contents from a file path. _Optional.
+  Default: `'[redacted]'` if `redactFileContents === true`, otherwise
+  `path => readFileSync(path, { encoding: 'utf8' })`._
 
 Returns **any** An object where the values are parsed according to
 <a href="#features">Features</a>.

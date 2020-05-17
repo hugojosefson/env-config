@@ -2,12 +2,11 @@ import pipe from './fn/pipe.mjs'
 import trim from './fn/trim.mjs'
 import toObjectReducer from './fn/to-object-reducer.mjs'
 import memoize from './fn/memoize.mjs'
-import readFile from './fn/read-file.mjs'
 import attemptDecode from './attempt-decode.mjs'
 import attemptJsonParse from './attempt-json-parse.mjs'
 import parseIfObject from './parse-if-object.mjs'
 
-export default decoders => {
+export default (decoders, readFile) => {
   const parsePair = ([key, value]) =>
     key.endsWith('_FILE')
       ? [key.replace(/_FILE$/, ''), parseFile(value)]
