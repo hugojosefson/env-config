@@ -46,7 +46,7 @@ npm install --save @hugojosefson/env-config
 ### Node.js version
 
 - Node.js `>=8.0.0` for using this package in your app.
-- Node.js `>=13.2.0` for running the developer tools to make changes to this
+- Node.js `>=13.7.0` for running the developer tools to make changes to this
   repository.
 
 _Note: If you use Node.js `<8.5.0`, you probably need to
