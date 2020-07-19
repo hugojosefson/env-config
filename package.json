@@ -12,6 +12,7 @@
     "documentation": "documentation readme --markdown-toc=false --access=public --resolve=node --quiet --shallow --section=API src/index.mjs",
     "test": "npm-run-all lint documentation lint-readme mocha",
     "itest": "./itest/test.sh",
+    "itest-upgrade-deps": "for i in itest/*-*; do (cd $i && yarn upgrade --latest); done;",
     "mocha": "mocha"
   },
   "files": [
