@@ -1,5 +1,5 @@
-import { isString } from './fn/is.mjs'
-import toObjectReducer from './fn/to-object-reducer.mjs'
+import { isString } from './fn/is'
+import toObjectReducer from './fn/to-object-reducer'
 
 const hasKeyIn = keys => ([key, value]) =>
   isString(key) &&

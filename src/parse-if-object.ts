@@ -1,7 +1,9 @@
-import { isArray, isObject } from './fn/is.mjs'
+import { isArray, isObject } from './fn/is'
 
-export default parseObject => {
-  const parseIfObject = value => {
+export default (
+  parseObject: (source: Record<string, any>) => Record<string, any>
+) => {
+  const parseIfObject = (value: any) => {
     if (isObject(value)) {
       return parseObject(value)
     }

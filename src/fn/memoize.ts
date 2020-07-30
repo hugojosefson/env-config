@@ -1,9 +1,11 @@
-import { isString } from './is.mjs'
+import { isString } from './is'
 
-export default fn => {
+export type UnaryFn<T, U> = (a: T) => U
+
+export default <T, U>(fn: UnaryFn<T, U>): UnaryFn<T, U> => {
   const cache = new Map()
 
-  return a => {
+  return (a: T): U => {
     if (!isString(a)) {
       return fn(a)
     }

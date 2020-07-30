@@ -1,2 +1,2 @@
-import envConfig from '../../src/index.mjs'
+import envConfig from '../../src'
 console.dir(envConfig())

@@ -1,9 +1,14 @@
 /* eslint-env mocha */
 import { deepStrictEqual as equal } from 'assert'
 import { readFileSync } from 'fs'
+import { dirname, resolve } from 'path'
 import { fileURLToPath } from 'url'
-import envConfig from '../src/index.mjs'
-import pipe from '../src/fn/pipe.mjs'
+import envConfig from '../src'
+import pipe from '../src/fn/pipe'
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore-line
+const __url = import.meta.url
 
 describe('envConfig', () => {
   it('is a function', () => {
@@ -25,7 +30,7 @@ describe('envConfig', () => {
 
     const actual = envConfig({
       keys: ['MY_OBJECT'],
-      source: { MY_OBJECT: JSON.stringify(MY_OBJECT) },
+      source: { MY_OBJECT: JSON.stringify(MY_OBJECT) }
     })
     const expected = { MY_OBJECT }
     equal(actual, expected)
@@ -36,19 +41,19 @@ describe('envConfig', () => {
 
     const actual = envConfig({
       keys: ['MY_ARRAY'],
-      source: { MY_ARRAY: JSON.stringify(MY_ARRAY) },
+      source: { MY_ARRAY: JSON.stringify(MY_ARRAY) }
     })
     const expected = { MY_ARRAY }
     equal(actual, expected)
   })
 
   it('reads a file', () => {
-    const path = fileURLToPath(import.meta.url)
+    const path = fileURLToPath(__url)
     const SOURCE_CODE = readFileSync(path, { encoding: 'utf8' }).trim()
 
     const actual = envConfig({
       keys: ['SOURCE_CODE', 'PORT'],
-      source: { SOURCE_CODE_FILE: path, PORT: '3000' },
+      source: { SOURCE_CODE_FILE: path, PORT: '3000' }
     })
     const expected = { SOURCE_CODE, PORT: 3000 }
     equal(actual, expected)
@@ -62,7 +67,7 @@ describe('envConfig', () => {
       FIXTURE: JSON.parse(
         readFileSync('test/fixture-1-result.json', { encoding: 'utf8' })
       ),
-      PORT: 3000,
+      PORT: 3000
     }
     equal(actual, expected)
   })
@@ -75,7 +80,7 @@ describe('envConfig', () => {
       FIXTURE: JSON.parse(
         readFileSync('test/fixture-3-result.json', { encoding: 'utf8' })
       ),
-      PORT: 3000,
+      PORT: 3000
     }
     equal(actual, expected)
   })
@@ -83,7 +88,7 @@ describe('envConfig', () => {
   it('decodes base64: value', () => {
     const actual = envConfig({
       keys: ['NAME'],
-      source: { NAME: 'base64:TXkgTmFtZQ==' },
+      source: { NAME: 'base64:TXkgTmFtZQ==' }
     })
     const expected = { NAME: 'My Name' }
     equal(actual, expected)
@@ -97,8 +102,8 @@ describe('envConfig', () => {
       source: {
         MY_OBJECT: `base64:${Buffer.from(JSON.stringify(MY_OBJECT)).toString(
           'base64'
-        )}`,
-      },
+        )}`
+      }
     })
     const expected = { MY_OBJECT }
     equal(actual, expected)
@@ -111,58 +116,58 @@ describe('envConfig', () => {
       FIXTURE: JSON.parse(
         readFileSync('test/fixture-3-result.json', { encoding: 'utf8' })
       ),
-      PORT: 3000,
+      PORT: 3000
     }
     equal(actual, expected)
   })
 
-  const base64 = s => 'base64:' + Buffer.from(s).toString('base64')
+  const base64 = (s: string) => 'base64:' + Buffer.from(s).toString('base64')
 
   it('decodes double base64 value', () => {
     const actual = envConfig({
-      source: { DOUBLE: base64(base64('Hi there!')) },
+      source: { DOUBLE: base64(base64('Hi there!')) }
     })
     const expected = {
-      DOUBLE: 'Hi there!',
+      DOUBLE: 'Hi there!'
     }
     equal(actual, expected)
   })
 
   it('{redactFileContents: true} returns [redacted] for file contents', () => {
-    const path = fileURLToPath(import.meta.url)
+    const path = fileURLToPath(__url)
     const actual = envConfig({
       keys: ['SOURCE_CODE', 'PORT'],
       source: { SOURCE_CODE_FILE: path, PORT: '3000' },
-      redactFileContents: true,
+      redactFileContents: true
     })
     const expected = {
       SOURCE_CODE: '[redacted]',
-      PORT: 3000,
+      PORT: 3000
     }
     equal(actual, expected)
   })
 
   it('{redactFileContents: true} returns [redacted] for file contents inside JSON object', () => {
-    const path = fileURLToPath(import.meta.url)
+    const path = fileURLToPath(__url)
     const actual = envConfig({
       keys: ['MY_JSON', 'PORT'],
       source: {
         MY_JSON: JSON.stringify({ a: { SOURCE_CODE_FILE: path, b: 2 } }),
-        PORT: '3000',
+        PORT: '3000'
       },
-      redactFileContents: true,
+      redactFileContents: true
     })
     const expected = {
       MY_JSON: { a: { SOURCE_CODE: '[redacted]', b: 2 } },
-      PORT: 3000,
+      PORT: 3000
     }
     equal(actual, expected)
   })
 })
 
 describe('pipe', () => {
-  const plusOne = x => x + 1
-  const double = x => 2 * x
+  const plusOne = (x: number) => x + 1
+  const double = (x: number) => 2 * x
 
   it('calls functions left to right', () => {
     const actual = pipe(plusOne, double)(10)

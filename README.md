@@ -16,7 +16,7 @@ Simplest case, using defaults for everything. Uses `process.env` as its
 `source`.
 
 ```js
-import envConfig from '@hugojosefson/env-config'
+import envConfig from "@hugojosefson/env-config"
 
 const { DB_PORT, DB_USERNAME, DB_PASSWORD } = envConfig()
 ```
@@ -24,8 +24,8 @@ const { DB_PORT, DB_USERNAME, DB_PASSWORD } = envConfig()
 ### Using options, for example to CamelCase key names
 
 ```js
-import envConfig from '@hugojosefson/env-config'
-import ra from 'ramda-adjunct'
+import envConfig from "@hugojosefson/env-config"
+import ra from "ramda-adjunct"
 
 const transformer = ra.renameKeysWith(camelcase)
 const { dbPort, dbUsername, dbPassword } = envConfig({ transformer })

@@ -1,9 +1,30 @@
 import { readFileSync } from 'fs'
-import identity from './fn/identity.mjs'
-import pipe from './fn/pipe.mjs'
-import onlyListedKeys from './only-listed-keys.mjs'
-import parseObject from './parse-object.mjs'
+import { UnaryPredicate } from './fn/and'
+import identity from './fn/identity'
+import pipe from './fn/pipe'
+import onlyListedKeys from './only-listed-keys'
+import parseObject from './parse-object'
 
+export type Config = Record<string, unknown>
+
+export interface Decoder {
+  prefix?: string
+  test?: UnaryPredicate<any>
+  decode?: (value: any) => any
+  decodeWithoutPrefix?: (value: any) => any
+}
+
+export type Transformer = (config: Config) => Config
+
+export type Options = {
+  source?: Record<string, unknown>
+  keys?: string[]
+  decoders?: Decoder[]
+  transformers?: Transformer[]
+  transformer?: Transformer
+  redactFileContents?: boolean
+  readFile?: (path: string) => string
+}
 /**
  * Parses the source into an object.
  *
@@ -18,42 +39,44 @@ import parseObject from './parse-object.mjs'
  * @public
  * @name envConfig
  */
-export default ({
-  source = process.env,
-  keys = Object.keys(source),
-  decoders = defaultDecoders,
-  transformers = [identity],
-  transformer = pipe(...transformers),
-  redactFileContents = false,
-  readFile = redactFileContents
-    ? () => '[redacted]'
-    : path => readFileSync(path, { encoding: 'utf8' }),
-} = {}) =>
-  pipe(
+export default (options: Options = {}) => {
+  const {
+    source = process.env,
+    keys = Object.keys(source),
+    decoders = defaultDecoders,
+    transformers = [identity],
+    transformer = pipe(...transformers),
+    redactFileContents = false,
+    readFile = redactFileContents
+      ? () => '[redacted]'
+      : path => readFileSync(path, { encoding: 'utf8' })
+  } = options
+  return pipe(
     onlyListedKeys(keys),
     parseObject(decoders, readFile),
     transformer
   )(source)
+}
 
 /**
  * Default decoders, decoding strings prefixed with `base64:` and `hex:` into strings, and `base64binary:` and `hexbinary` into `Buffer`s.
  * @public
  */
-export const defaultDecoders = [
+export const defaultDecoders: Decoder[] = [
   {
     prefix: 'base64:',
-    decodeWithoutPrefix: s => Buffer.from(s, 'base64').toString(),
+    decodeWithoutPrefix: s => Buffer.from(s, 'base64').toString()
   },
   {
     prefix: 'base64binary:',
-    decodeWithoutPrefix: s => Buffer.from(s, 'base64'),
+    decodeWithoutPrefix: s => Buffer.from(s, 'base64')
   },
   {
     prefix: 'hex:',
-    decodeWithoutPrefix: s => Buffer.from(s, 'hex').toString(),
+    decodeWithoutPrefix: s => Buffer.from(s, 'hex').toString()
   },
   {
     prefix: 'hexbinary:',
-    decodeWithoutPrefix: s => Buffer.from(s, 'hex'),
-  },
+    decodeWithoutPrefix: s => Buffer.from(s, 'hex')
+  }
 ]

@@ -5,6 +5,7 @@ yarn-error.log
 __sapper__/
 .idea/
 /.dockerignore
-/cjs/
 /*.log
 /*.tgz
+/.eslintcache
+/lib/

@@ -1,9 +1,7 @@
 /**
  * If possible, parses input param as JSON. Otherwise returns s.
- * @param s
- * @returns {any}
  */
-export default s => {
+export default (s: string): string | any => {
   try {
     return JSON.parse(s)
   } catch (ignored) {
