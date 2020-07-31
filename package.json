@@ -11,10 +11,10 @@
     "build:cjs": "tsc -p tsconfig-cjs.json",
     "lint": "run-p lint:*",
     "lint:markdown": "prettier --config .prettierrc-markdown.js --write '{**/*,*}.md'",
-    "lint:code": "eslint --fix --ext .mjs,.js,.ts .",
+    "lint:code": "eslint --fix --ext .mjs,.js,.ts src test ./*.js",
     "documentation": "documentation readme --markdown-toc=false --access=public --resolve=node --quiet --shallow --section=API src/index.ts",
     "test": "run-s lint documentation lint:markdown mocha",
-    "mocha": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\"}' ts-mocha -p tsconfig-test.json 'test/**/*'",
+    "mocha": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\"}' ts-mocha -p tsconfig-test.json 'test/**/*.ts'",
     "itest": "./itest/test.sh",
     "itest-upgrade-deps": "for i in itest/*-*; do (cd $i && yarn upgrade --latest); done;"
   },

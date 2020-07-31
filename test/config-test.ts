@@ -1,14 +1,8 @@
 /* eslint-env mocha */
 import { deepStrictEqual as equal } from 'assert'
 import { readFileSync } from 'fs'
-import { dirname, resolve } from 'path'
-import { fileURLToPath } from 'url'
 import envConfig from '../src'
 import pipe from '../src/fn/pipe'
-
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore-line
-const __url = import.meta.url
 
 describe('envConfig', () => {
   it('is a function', () => {
@@ -48,7 +42,7 @@ describe('envConfig', () => {
   })
 
   it('reads a file', () => {
-    const path = fileURLToPath(__url)
+    const path = __filename
     const SOURCE_CODE = readFileSync(path, { encoding: 'utf8' }).trim()
 
     const actual = envConfig({
@@ -134,10 +128,9 @@ describe('envConfig', () => {
   })
 
   it('{redactFileContents: true} returns [redacted] for file contents', () => {
-    const path = fileURLToPath(__url)
     const actual = envConfig({
       keys: ['SOURCE_CODE', 'PORT'],
-      source: { SOURCE_CODE_FILE: path, PORT: '3000' },
+      source: { SOURCE_CODE_FILE: __filename, PORT: '3000' },
       redactFileContents: true
     })
     const expected = {
@@ -148,11 +141,10 @@ describe('envConfig', () => {
   })
 
   it('{redactFileContents: true} returns [redacted] for file contents inside JSON object', () => {
-    const path = fileURLToPath(__url)
     const actual = envConfig({
       keys: ['MY_JSON', 'PORT'],
       source: {
-        MY_JSON: JSON.stringify({ a: { SOURCE_CODE_FILE: path, b: 2 } }),
+        MY_JSON: JSON.stringify({ a: { SOURCE_CODE_FILE: __filename, b: 2 } }),
         PORT: '3000'
       },
       redactFileContents: true
