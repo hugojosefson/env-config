@@ -163,3 +163,6 @@ Returns **any** An object where the values are parsed according to
 
 Default decoders, decoding strings prefixed with `base64:` and `hex:` into
 strings, and `base64binary:` and `hexbinary` into `Buffer`s.
+
+Type:
+[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;Decoder>

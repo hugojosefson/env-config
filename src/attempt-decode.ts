@@ -20,7 +20,9 @@ const attemptDecodeReducer = (
   return acc
 }
 
-export default (decoders: Decoder[]) => {
+export default (
+  decoders: Decoder[]
+): ((value: any, ...seenValues: any[]) => any) => {
   if (decoders.length === 0) {
     return identity
   }

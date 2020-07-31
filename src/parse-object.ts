@@ -7,7 +7,10 @@ import attemptJsonParse from './attempt-json-parse'
 import { Decoder } from './index'
 import parseIfObject from './parse-if-object'
 
-export default (decoders: Decoder[], readFile: (path: string) => string) => {
+export default (
+  decoders: Decoder[],
+  readFile: (path: string) => string
+): ((source: Record<string, any>) => Record<string, any>) => {
   const parsePair = ([key, value]: [string, any]) =>
     key.endsWith('_FILE')
       ? [key.replace(/_FILE$/, ''), parseFile(value)]

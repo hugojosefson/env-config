@@ -2,8 +2,8 @@ import { isArray, isObject } from './fn/is'
 
 export default (
   parseObject: (source: Record<string, any>) => Record<string, any>
-) => {
-  const parseIfObject = (value: any) => {
+): ((value: any) => any) => {
+  const parseIfObject = (value: any): any => {
     if (isObject(value)) {
       return parseObject(value)
     }

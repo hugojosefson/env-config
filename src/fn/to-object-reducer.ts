@@ -1,6 +1,6 @@
-export default <T extends Record<U, unknown>, U extends keyof T>(
+export default <T extends Record<K, unknown>, K extends keyof T>(
   acc: T,
-  [key, value]: [U, any]
+  [key, value]: [K, any]
 ): T => {
   acc[key] = value
   return acc

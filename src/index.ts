@@ -15,9 +15,10 @@ export interface Decoder {
 }
 
 export type Transformer = (config: Config) => Config
+export type Source = Record<string, string | undefined>
 
 export type Options = {
-  source?: Record<string, unknown>
+  source?: Source
   keys?: string[]
   decoders?: Decoder[]
   transformers?: Transformer[]
@@ -39,7 +40,7 @@ export type Options = {
  * @public
  * @name envConfig
  */
-export default (options: Options = {}) => {
+export default (options: Options = {}): Record<string, any> => {
   const {
     source = process.env,
     keys = Object.keys(source),
@@ -65,18 +66,19 @@ export default (options: Options = {}) => {
 export const defaultDecoders: Decoder[] = [
   {
     prefix: 'base64:',
-    decodeWithoutPrefix: s => Buffer.from(s, 'base64').toString()
+    decodeWithoutPrefix: (s: string): string =>
+      Buffer.from(s, 'base64').toString()
   },
   {
     prefix: 'base64binary:',
-    decodeWithoutPrefix: s => Buffer.from(s, 'base64')
+    decodeWithoutPrefix: (s: string): Buffer => Buffer.from(s, 'base64')
   },
   {
     prefix: 'hex:',
-    decodeWithoutPrefix: s => Buffer.from(s, 'hex').toString()
+    decodeWithoutPrefix: (s: string): string => Buffer.from(s, 'hex').toString()
   },
   {
     prefix: 'hexbinary:',
-    decodeWithoutPrefix: s => Buffer.from(s, 'hex')
+    decodeWithoutPrefix: (s: string): Buffer => Buffer.from(s, 'hex')
   }
 ]

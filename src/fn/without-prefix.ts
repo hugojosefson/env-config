@@ -1,6 +1,6 @@
 import identity from './identity'
 
-export default <T, U>(prefix: T) => {
+export default <T, U>(prefix: T): ((s: U) => U) => {
   if (typeof prefix !== 'string') return identity
   if (prefix.length === 0) return identity
 
