@@ -12,7 +12,7 @@
     "lint": "run-p lint:*",
     "lint:markdown": "prettier --config .prettierrc-markdown.js --write '{**/*,*}.md'",
     "lint:code": "eslint --fix --ext .mjs,.js,.ts src test ./*.js",
-    "documentation": "documentation readme --markdown-toc=false --access=public --resolve=node --quiet --shallow --section=API src/index.ts",
+    "documentation": "documentation readme --markdown-toc=false --access=public --resolve=node --quiet=true --shallow=true --section=API src/index.ts",
     "test": "run-s lint documentation lint:markdown mocha",
     "mocha": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\"}' ts-mocha -p tsconfig-test.json 'test/**/*.ts'",
     "itest": "./itest/test.sh",
