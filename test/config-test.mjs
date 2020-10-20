@@ -1,5 +1,5 @@
 /* eslint-env mocha */
-import { deepStrictEqual as equal } from 'assert'
+import { deepStrictEqual as equal, throws } from 'assert'
 import { readFileSync } from 'fs'
 import { fileURLToPath } from 'url'
 import envConfig from '../src/index.mjs'
@@ -157,6 +157,29 @@ describe('envConfig', () => {
       PORT: 3000,
     }
     equal(actual, expected)
+  })
+
+  it(`doesn't fail on missing file, by default`, () => {
+    const path = '/some/missing/path/to/no/file'
+
+    const actual = envConfig({
+      keys: ['SOURCE_CODE', 'PORT'],
+      source: { SOURCE_CODE_FILE: path, PORT: '3000' },
+    })
+    const expected = { SOURCE_CODE_FILE: path, PORT: 3000 }
+    equal(actual, expected)
+  })
+
+  it('fails on missing file, if told to', () => {
+    const path = '/some/missing/path/to/no/file'
+
+    throws(() =>
+      envConfig({
+        failOnMissingFile: true,
+        keys: ['SOURCE_CODE', 'PORT'],
+        source: { SOURCE_CODE_FILE: path, PORT: '3000' },
+      })
+    )
   })
 })
 

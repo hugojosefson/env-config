@@ -6,11 +6,23 @@ import attemptDecode from './attempt-decode.mjs'
 import attemptJsonParse from './attempt-json-parse.mjs'
 import parseIfObject from './parse-if-object.mjs'
 
-export default (decoders, readFile) => {
-  const parsePair = ([key, value]) =>
-    key.endsWith('_FILE')
-      ? [key.replace(/_FILE$/, ''), parseFile(value)]
-      : [key, parseValue(value)]
+export default (decoders, readFile, failOnMissingFile) => {
+  const parsePair = ([key, value]) => {
+    const asFile = () => [key.replace(/_FILE$/, ''), parseFile(value)]
+    const asValue = () => [key, parseValue(value)]
+
+    if (key.endsWith('_FILE')) {
+      try {
+        return asFile()
+      } catch (e) {
+        if (failOnMissingFile) {
+          throw e
+        }
+      }
+    }
+
+    return asValue()
+  }
 
   const parseObject = source =>
     Object.entries(source).map(parsePair).reduce(toObjectReducer, {})

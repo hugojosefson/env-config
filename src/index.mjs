@@ -14,6 +14,7 @@ import parseObject from './parse-object.mjs'
  * @param transformer Alternatively for convenience, a single function for making any change to the configuration object afterwards. _Takes the complete config object as argument, and must return the new/altered config object. Optional._
  * @param redactFileContents Whether to redact contents from files. _Optional. Default: `false`._
  * @param readFile Synchronous function to read contents from a file path. _Optional. Default: `'[redacted]'` if `redactFileContents === true`, otherwise `path => readFileSync(path, { encoding: 'utf8' })`._
+ * @param failOnMissingFile Whether to fail if a file can not be read. If `true`, will throw an error if the path to a `_FILE` can not be read, If `false`, will leave the `_FILE` key as it was. _Optional. Default: `false`._
  * @returns {*} An object where the values are parsed according to <a href="#features">Features</a>.
  * @public
  * @name envConfig
@@ -28,10 +29,11 @@ export default ({
   readFile = redactFileContents
     ? () => '[redacted]'
     : path => readFileSync(path, { encoding: 'utf8' }),
+  failOnMissingFile = false,
 } = {}) =>
   pipe(
     onlyListedKeys(keys),
-    parseObject(decoders, readFile),
+    parseObject(decoders, readFile, failOnMissingFile),
     transformer
   )(source)
 

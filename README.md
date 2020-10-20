@@ -155,6 +155,9 @@ Parses the source into an object.
 - `readFile` Synchronous function to read contents from a file path. _Optional.
   Default: `'[redacted]'` if `redactFileContents === true`, otherwise
   `path => readFileSync(path, { encoding: 'utf8' })`._
+- `failOnMissingFile` Whether to fail if a file can not be read. If `true`, will
+  throw an error if the path to a `_FILE` can not be read, If `false`, will
+  leave the `_FILE` key as it was. _Optional. Default: `false`._
 
 Returns **any** An object where the values are parsed according to
 <a href="#features">Features</a>.
