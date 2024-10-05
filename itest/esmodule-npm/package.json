@@ -7,6 +7,6 @@
     "test": "docker run --rm -i -v $(pwd):/app:ro -w /app --env-file env.env node:latest node index.mjs"
   },
   "dependencies": {
-    "@hugojosefson/env-config": "^2.0.0"
+    "@hugojosefson/env-config": "^2.0.1"
   }
 }
